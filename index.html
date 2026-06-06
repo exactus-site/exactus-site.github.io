@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exactus — Dados · Analytics · Inteligência Artificial</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0D1F3C;--navy2:#1A3358;--blue:#1E5FBF;--accent:#3B8EF0;
+  --gold:#C9973A;--gold2:#F0BC5A;--white:#F8F6F1;--gray:#8A8F9E;
+  --light:#EDF2FA;--border:rgba(59,142,240,0.15);
+  --shadow:0 8px 40px rgba(13,31,60,0.18);
+  --green:#6DBF8A;--red:#F08070;--purple:#C0A8F8;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--white);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% 10%,rgba(30,95,191,0.12) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(201,151,58,0.07) 0%,transparent 50%);pointer-events:none;z-index:0;}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(13,31,60,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:20px;color:var(--white);text-decoration:none;cursor:pointer;}
+.nav-logo span{color:var(--gold2);}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-link{background:none;border:none;color:var(--gray);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 14px;border-radius:8px;cursor:pointer;transition:all .2s;}
+.nav-link:hover,.nav-link.active{color:var(--white);background:rgba(255,255,255,0.06);}
+.nav-cta{background:var(--blue);color:var(--white);border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:8px 18px;border-radius:8px;cursor:pointer;transition:all .2s;margin-left:8px;}
+.nav-cta:hover{background:var(--accent);}
+.hamburger{display:none;background:none;border:none;color:var(--white);cursor:pointer;padding:8px;}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(13,31,60,0.98);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);z-index:99;padding:16px 24px;flex-direction:column;gap:4px;}
+.mobile-menu.open{display:flex;}
+.mobile-link{background:none;border:none;color:var(--gray);font-family:'DM Sans',sans-serif;font-size:15px;padding:12px 16px;border-radius:8px;cursor:pointer;text-align:left;transition:all .2s;}
+.mobile-link:hover{color:var(--white);background:rgba(255,255,255,0.06);}
+
+/* ── PAGES ── */
+.page{display:none;min-height:calc(100vh - 60px);position:relative;z-index:1;}
+.page.active{display:block;}
+.container{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+/* ── HOME ── */
+.hero-section{padding:80px 0 60px;text-align:center;}
+.hero-badge{display:inline-block;background:rgba(201,151,58,0.12);border:1px solid rgba(201,151,58,0.3);color:var(--gold2);font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:24px;}
+.hero-title{font-family:'DM Serif Display',serif;font-size:clamp(36px,6vw,68px);line-height:1.1;color:var(--white);margin-bottom:20px;}
+.hero-title em{font-style:italic;color:var(--gold2);}
+.hero-desc{font-size:18px;color:var(--gray);line-height:1.7;max-width:600px;margin:0 auto 40px;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--blue);color:var(--white);border:1px solid transparent;border-radius:10px;padding:14px 28px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;}
+.btn-primary:hover{background:var(--accent);transform:translateY(-1px);}
+.btn-secondary{background:transparent;color:var(--accent);border:1px solid var(--border);border-radius:10px;padding:14px 28px;font-family:'DM Sans',sans-serif;font-size:15px;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;}
+.btn-secondary:hover{border-color:var(--accent);background:rgba(59,142,240,0.1);}
+
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:60px 0;}
+.stat-item{background:rgba(13,31,60,0.9);padding:24px 16px;text-align:center;}
+.stat-val{font-family:'DM Serif Display',serif;font-size:30px;color:var(--gold2);display:block;margin-bottom:4px;}
+.stat-label{font-size:11px;color:var(--gray);letter-spacing:.06em;}
+
+/* DOR SECTION */
+.section-header{margin-bottom:40px;}
+.section-badge{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);margin-bottom:12px;display:block;}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(24px,4vw,36px);color:var(--white);margin-bottom:10px;}
+.section-desc{font-size:15px;color:var(--gray);line-height:1.6;max-width:580px;}
+
+.dores-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:16px;}
+.dor-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:24px;cursor:pointer;text-align:left;transition:all .22s;position:relative;overflow:hidden;}
+.dor-card:hover{border-color:rgba(59,142,240,0.4);transform:translateY(-3px);background:rgba(59,142,240,0.06);}
+.dor-card.active{border-color:var(--accent);background:rgba(59,142,240,0.1);box-shadow:0 0 0 1px var(--accent),var(--shadow);}
+.dor-num{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gray);margin-bottom:10px;display:block;}
+.dor-title{font-family:'DM Serif Display',serif;font-size:18px;color:var(--white);line-height:1.25;margin-bottom:8px;}
+.dor-desc{font-size:13px;color:var(--gray);line-height:1.5;}
+.dor-arrow{position:absolute;bottom:20px;right:20px;color:var(--accent);font-size:18px;transition:transform .2s;}
+.dor-card:hover .dor-arrow,.dor-card.active .dor-arrow{transform:translateX(4px);}
+
+.dor-service-panel{background:rgba(59,142,240,0.06);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:48px;animation:fadeSlide .3s ease;display:none;}
+.dor-service-panel.visible{display:block;}
+.dsp-tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);margin-bottom:8px;display:block;}
+.dsp-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--white);margin-bottom:8px;}
+.dsp-desc{font-size:14px;color:var(--gray);line-height:1.6;margin-bottom:20px;}
+.dsp-items{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+.dsp-item{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--white);display:flex;align-items:flex-start;gap:8px;}
+.dsp-item::before{content:'→';color:var(--accent);flex-shrink:0;font-weight:500;}
+.dsp-btns{display:flex;gap:10px;flex-wrap:wrap;}
+
+/* SOCIAL PROOF */
+.proof-section{padding:60px 0;border-top:1px solid var(--border);}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px;}
+.proof-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:24px;}
+.proof-quote{font-size:14px;color:var(--white);line-height:1.6;margin-bottom:16px;font-style:italic;}
+.proof-author{font-size:12px;color:var(--gray);}
+.proof-author strong{color:var(--gold2);display:block;margin-bottom:2px;}
+
+/* CTA BANNER */
+.cta-banner{background:linear-gradient(135deg,rgba(30,95,191,0.2) 0%,rgba(201,151,58,0.1) 100%);border:1px solid var(--border);border-radius:20px;padding:56px 40px;text-align:center;margin:60px 0;}
+.cta-banner-title{font-family:'DM Serif Display',serif;font-size:clamp(24px,4vw,38px);color:var(--white);margin-bottom:12px;}
+.cta-banner-desc{font-size:16px;color:var(--gray);margin-bottom:32px;line-height:1.6;}
+
+/* ── SOBRE ── */
+.sobre-hero{padding:80px 0 60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.sobre-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);margin-bottom:16px;display:block;}
+.sobre-title{font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,44px);color:var(--white);line-height:1.15;margin-bottom:16px;}
+.sobre-title em{font-style:italic;color:var(--gold2);}
+.sobre-desc{font-size:15px;color:var(--gray);line-height:1.7;}
+.sobre-visual{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:16px;}
+.sv-item{display:flex;align-items:center;gap:14px;}
+.sv-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.sv-text{font-size:13px;color:var(--gray);line-height:1.5;}
+.sv-text strong{color:var(--white);display:block;margin-bottom:2px;}
+
+.mvv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:60px 0;}
+.mvv-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;padding:28px;}
+.mvv-icon{font-size:28px;margin-bottom:16px;display:block;}
+.mvv-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);margin-bottom:10px;display:block;}
+.mvv-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--white);margin-bottom:10px;}
+.mvv-desc{font-size:13px;color:var(--gray);line-height:1.6;}
+
+.team-section{padding:60px 0;border-top:1px solid var(--border);}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px;}
+.team-card{background:var(--navy2);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;transition:all .25s;position:relative;}
+.team-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:20px 20px 0 0;transition:opacity .25s;opacity:0;}
+.team-card:hover{border-color:rgba(59,142,240,0.4);transform:translateY(-3px);box-shadow:0 12px 40px rgba(13,31,60,0.4);}
+.team-card:hover::after{opacity:1;}
+.team-card.tc-blue::after{background:linear-gradient(90deg,var(--blue),var(--accent));}
+.team-card.tc-gold::after{background:linear-gradient(90deg,var(--gold),var(--gold2));}
+.team-card.tc-green::after{background:linear-gradient(90deg,#1A6B3C,#6DBF8A);}
+.team-avatar{width:76px;height:76px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:26px;color:var(--white);margin:0 auto 18px;}
+.team-initials{line-height:1;}
+.team-name{font-family:'DM Serif Display',serif;font-size:18px;color:var(--white);margin-bottom:4px;}
+.team-role{font-size:11px;color:var(--gold2);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;display:block;}
+.team-divider{width:28px;height:1px;background:rgba(59,142,240,0.3);margin:0 auto 16px;}
+.team-edu{display:flex;flex-direction:column;gap:16px;}
+.team-edu-item{display:flex;flex-direction:column;gap:4px;}
+.team-edu-degree{font-size:13px;color:var(--white);line-height:1.5;font-weight:500;}
+.team-edu-school{font-size:11px;color:var(--gold2);letter-spacing:.05em;margin-top:2px;}
+
+/* SQUAD */
+.squad-section{padding:48px 0 60px;border-top:1px solid var(--border);margin-top:8px;}
+.squad-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:32px;}
+.squad-tags{display:flex;flex-wrap:wrap;gap:10px;}
+.squad-tag{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:100px;padding:8px 16px;font-size:12px;color:var(--gray);transition:all .2s;}
+.squad-tag:hover{border-color:rgba(59,142,240,0.3);color:var(--white);background:rgba(59,142,240,0.06);}
+.squad-tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.squad-strip{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:16px;padding:28px 32px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+.squad-col{padding:0 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:8px;}
+.squad-col:first-child{padding-left:0;}
+.squad-col:last-child{border-right:none;padding-right:0;}
+.squad-col-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);margin-bottom:4px;}
+.squad-skill{font-size:13px;color:var(--gray);display:flex;align-items:center;gap:6px;line-height:1.5;}
+.squad-skill::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+
+@media(max-width:900px){
+  .squad-strip{grid-template-columns:1fr 1fr;}
+  .squad-col{border-right:none;border-bottom:1px solid var(--border);padding:16px 0;}
+  .squad-col:last-child{border-bottom:none;}
+}
+@media(max-width:600px){
+  .squad-strip{grid-template-columns:1fr;}
+  .squad-col{border-bottom:1px solid var(--border);padding:16px 0;}
+}
+
+/* ── SERVIÇOS ── */
+.servicos-hero{padding:80px 0 40px;text-align:center;}
+.svc-instruction{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:100px;padding:8px 16px;font-size:12px;color:var(--gray);margin-top:16px;}
+
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:40px 0 16px;}
+.svc-btn{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:20px 18px;cursor:pointer;text-align:left;transition:all .22s;position:relative;overflow:hidden;}
+.svc-btn:hover{border-color:rgba(59,142,240,0.4);transform:translateY(-2px);}
+.svc-btn.active{border-color:var(--accent);background:rgba(59,142,240,0.12);transform:translateY(-2px);box-shadow:0 0 0 1px var(--accent);}
+.svc-num{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gray);margin-bottom:8px;display:block;}
+.svc-name{font-family:'DM Serif Display',serif;font-size:15px;color:var(--white);line-height:1.2;margin-bottom:6px;display:block;}
+.svc-tagline{font-size:11px;color:var(--gray);line-height:1.4;display:block;}
+.svc-badge{display:inline-block;margin-top:10px;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:100px;}
+
+.panel-wrap{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:48px;display:none;animation:fadeSlide .3s ease;}
+.panel-wrap.visible{display:block;}
+.panel-header{padding:28px 32px 24px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.panel-header-left{flex:1;}
+.panel-num{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);margin-bottom:8px;display:block;}
+.panel-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--white);margin-bottom:8px;}
+.panel-desc{font-size:14px;color:var(--gray);line-height:1.6;max-width:480px;}
+.panel-kpis{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.panel-kpi{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:10px 14px;text-align:center;min-width:90px;}
+.panel-kpi-val{font-size:15px;font-weight:600;color:var(--gold2);display:block;margin-bottom:2px;}
+.panel-kpi-label{font-size:10px;color:var(--gray);letter-spacing:.05em;}
+.panel-tabs{display:flex;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.panel-tabs::-webkit-scrollbar{display:none;}
+.ptab{padding:14px 24px;font-size:13px;color:var(--gray);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;background:none;border-left:none;border-right:none;border-top:none;font-family:'DM Sans',sans-serif;}
+.ptab:hover{color:var(--white);}
+.ptab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.panel-body{padding:28px 32px;}
+.ptab-content{display:none;}
+.ptab-content.active{display:block;animation:fadeIn .2s ease;}
+
+.panel-cta-bar{display:flex;gap:10px;align-items:center;padding:20px 32px;border-top:1px solid var(--border);background:rgba(59,142,240,0.04);}
+.panel-cta-bar p{font-size:13px;color:var(--gray);flex:1;}
+
+.phases{display:flex;flex-direction:column;gap:0;}
+.phase{display:flex;gap:20px;padding:20px 0;border-bottom:1px solid var(--border);}
+.phase:last-child{border-bottom:none;}
+.phase-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;border:1px solid;}
+.phase-body{flex:1;}
+.phase-title{font-size:14px;font-weight:500;color:var(--white);margin-bottom:4px;}
+.phase-prazo{font-size:11px;color:var(--gold2);margin-bottom:6px;display:block;letter-spacing:.04em;}
+.phase-desc{font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:10px;}
+.checklist{display:flex;flex-direction:column;gap:4px;}
+.chk{font-size:12px;color:#6DBF8A;display:flex;align-items:flex-start;gap:6px;line-height:1.4;}
+.chk::before{content:'✓';flex-shrink:0;font-weight:600;}
+.owner-tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:100px;margin-top:8px;font-weight:500;}
+.ow-biz{background:rgba(59,142,240,0.15);color:#7FB8F8;border:1px solid rgba(59,142,240,0.3);}
+.ow-tec{background:rgba(109,191,138,0.12);color:#6DBF8A;border:1px solid rgba(109,191,138,0.3);}
+.ow-both{background:rgba(201,151,58,0.12);color:var(--gold2);border:1px solid rgba(201,151,58,0.3);}
+.deliverables{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.del-item{background:rgba(59,142,240,0.07);border:1px solid rgba(59,142,240,0.15);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--white);line-height:1.4;display:flex;align-items:flex-start;gap:8px;}
+.del-item::before{content:'→';color:var(--accent);flex-shrink:0;font-weight:500;}
+.risks{display:flex;flex-direction:column;gap:10px;}
+.risk-item{background:rgba(201,151,58,0.06);border:1px solid rgba(201,151,58,0.2);border-radius:10px;padding:14px 16px;font-size:13px;color:var(--white);line-height:1.5;display:flex;align-items:flex-start;gap:10px;}
+.risk-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.quando-wrap{display:flex;flex-direction:column;gap:12px;}
+.quando-item{display:flex;align-items:flex-start;gap:12px;}
+.quando-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;background:var(--accent);}
+.quando-text{font-size:13px;color:var(--gray);line-height:1.6;}
+.quando-text strong{color:var(--white);}
+
+/* ── BLOG ── */
+.blog-hero{padding:80px 0 40px;text-align:center;}
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:40px 0 60px;}
+.blog-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .22s;cursor:pointer;}
+.blog-card:hover{border-color:rgba(59,142,240,0.4);transform:translateY(-3px);}
+.blog-thumb{height:160px;background:linear-gradient(135deg,var(--navy2),rgba(30,95,191,0.4));display:flex;align-items:center;justify-content:center;font-size:48px;}
+.blog-body{padding:20px;}
+.blog-cat{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);margin-bottom:8px;display:block;}
+.blog-title{font-family:'DM Serif Display',serif;font-size:17px;color:var(--white);line-height:1.3;margin-bottom:8px;}
+.blog-excerpt{font-size:12px;color:var(--gray);line-height:1.5;margin-bottom:14px;}
+.blog-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--gray);}
+.blog-read{color:var(--accent);font-size:12px;font-weight:500;}
+
+.blog-featured{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:36px;margin-bottom:40px;display:grid;grid-template-columns:1fr 1.2fr;gap:36px;align-items:center;}
+.bf-tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);margin-bottom:12px;display:block;}
+.bf-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,3vw,28px);color:var(--white);line-height:1.2;margin-bottom:12px;}
+.bf-excerpt{font-size:14px;color:var(--gray);line-height:1.6;margin-bottom:20px;}
+.bf-visual{background:linear-gradient(135deg,rgba(30,95,191,0.2),rgba(201,151,58,0.15));border-radius:14px;height:220px;display:flex;align-items:center;justify-content:center;font-size:64px;}
+
+.newsletter{background:rgba(59,142,240,0.06);border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center;margin-bottom:60px;}
+.nl-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--white);margin-bottom:8px;}
+.nl-desc{font-size:14px;color:var(--gray);margin-bottom:24px;}
+.nl-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.nl-input{background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;padding:12px 18px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--white);width:280px;outline:none;transition:border-color .2s;}
+.nl-input::placeholder{color:var(--gray);}
+.nl-input:focus{border-color:var(--accent);}
+
+/* ── CONTATO ── */
+.contato-page{padding:80px 0 60px;}
+.contato-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:48px;align-items:start;}
+.contato-info h2{font-family:'DM Serif Display',serif;font-size:clamp(24px,4vw,36px);color:var(--white);line-height:1.2;margin-bottom:16px;}
+.contato-info h2 em{font-style:italic;color:var(--gold2);}
+.contato-info p{font-size:14px;color:var(--gray);line-height:1.7;margin-bottom:32px;}
+.info-items{display:flex;flex-direction:column;gap:16px;}
+.info-item{display:flex;align-items:flex-start;gap:14px;}
+.info-icon{width:40px;height:40px;background:rgba(59,142,240,0.1);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.info-text{font-size:13px;color:var(--gray);line-height:1.5;}
+.info-text strong{color:var(--white);display:block;margin-bottom:2px;}
+
+.contato-form{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:36px;}
+.form-title{font-family:'DM Serif Display',serif;font-size:22px;color:var(--white);margin-bottom:6px;}
+.form-subtitle{font-size:13px;color:var(--gray);margin-bottom:28px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:12px;color:var(--gray);letter-spacing:.04em;font-weight:500;}
+.form-input,.form-select{background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--white);outline:none;transition:border-color .2s;width:100%;-webkit-appearance:none;}
+.form-input::placeholder{color:rgba(138,143,158,0.6);}
+.form-input:focus,.form-select:focus{border-color:var(--accent);background:rgba(59,142,240,0.06);}
+.form-select option{background:var(--navy2);color:var(--white);}
+.wa-toggle{display:flex;align-items:center;gap:8px;margin-top:4px;}
+.wa-toggle input{width:16px;height:16px;cursor:pointer;accent-color:var(--accent);}
+.wa-toggle label{font-size:12px;color:var(--gray);cursor:pointer;}
+.form-submit{width:100%;background:var(--blue);color:var(--white);border:none;border-radius:10px;padding:16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:8px;letter-spacing:.02em;}
+.form-submit:hover{background:var(--accent);transform:translateY(-1px);}
+.form-success{display:none;text-align:center;padding:40px 20px;}
+.form-success h3{font-family:'DM Serif Display',serif;font-size:24px;color:var(--white);margin-bottom:10px;}
+.form-success p{font-size:14px;color:var(--gray);}
+.form-success .success-icon{font-size:48px;margin-bottom:16px;display:block;}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:40px 0;position:relative;z-index:1;}
+.footer-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;}
+.footer-brand .logo{font-family:'DM Serif Display',serif;font-size:20px;color:var(--white);}
+.footer-brand .logo span{color:var(--gold2);}
+.footer-brand p{font-size:13px;color:var(--gray);line-height:1.6;margin-top:10px;max-width:220px;}
+.footer-col h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);margin-bottom:16px;}
+.footer-col a,.footer-col button{display:block;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--gray);padding:4px 0;cursor:pointer;text-align:left;transition:color .2s;text-decoration:none;}
+.footer-col a:hover,.footer-col button:hover{color:var(--white);}
+.footer-bottom{border-top:1px solid var(--border);padding:20px 24px 0;max-width:1100px;margin:24px auto 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.footer-bottom p{font-size:12px;color:var(--gray);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:block;}
+  .sobre-hero{grid-template-columns:1fr;gap:32px;}
+  .mvv-grid{grid-template-columns:1fr 1fr;}
+  .team-grid{grid-template-columns:1fr;max-width:480px;margin-left:auto;margin-right:auto;}
+  .svc-grid{grid-template-columns:repeat(2,1fr);}
+  .blog-grid{grid-template-columns:1fr 1fr;}
+  .blog-featured{grid-template-columns:1fr;}
+  .contato-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+  .stats-bar{grid-template-columns:repeat(2,1fr);}
+  .dores-grid{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .mvv-grid{grid-template-columns:1fr;}
+  .team-grid{grid-template-columns:1fr;gap:16px;}
+  .team-card{padding:28px 24px;}
+  .svc-grid{grid-template-columns:1fr 1fr;}
+  .blog-grid{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr;}
+  .panel-body{padding:20px 18px;}
+  .panel-header{padding:20px 18px;flex-direction:column;}
+  .deliverables{grid-template-columns:1fr;}
+  .dsp-items{grid-template-columns:1fr;}
+  .proof-grid{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  .svc-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')">EXACTUS<span>.</span></div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="showPage('home')">Home</button>
+      <button class="nav-link" onclick="showPage('sobre')">Quem Somos</button>
+      <button class="nav-link" onclick="showPage('servicos')">Nossos Serviços</button>
+      <button class="nav-link" onclick="showPage('blog')">Blog</button>
+      <button class="nav-link" onclick="showPage('contato')">Contato</button>
+    </div>
+    <button class="nav-cta" onclick="showPage('contato')">Fale com um especialista</button>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-link" onclick="showPage('home');toggleMenu()">Home</button>
+  <button class="mobile-link" onclick="showPage('sobre');toggleMenu()">Quem Somos</button>
+  <button class="mobile-link" onclick="showPage('servicos');toggleMenu()">Nossos Serviços</button>
+  <button class="mobile-link" onclick="showPage('blog');toggleMenu()">Blog</button>
+  <button class="mobile-link" onclick="showPage('contato');toggleMenu()">Contato</button>
+</div>
+
+<!-- ══════════════════ HOME ══════════════════ -->
+<div class="page active" id="page-home">
+  <div class="container">
+
+    <div class="hero-section">
+      <span class="hero-badge">Dados · Analytics · Inteligência Artificial</span>
+      <h1 class="hero-title">Seus dados já têm<br>as <em>respostas.</em><br>A gente traduz.</h1>
+      <p class="hero-desc">Transformamos dados que já existem no seu negócio em decisões que geram resultado real — em semanas, não meses.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('contato')">Agendar conversa gratuita — 30 min</button>
+        <button class="btn-secondary" onclick="showPage('servicos')">Ver nossos serviços</button>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item"><span class="stat-val">+22%</span><span class="stat-label">Receita média pós-implantação</span></div>
+      <div class="stat-item"><span class="stat-val">−14%</span><span class="stat-label">Custo operacional</span></div>
+      <div class="stat-item"><span class="stat-val">3–8×</span><span class="stat-label">ROI médio</span></div>
+      <div class="stat-item"><span class="stat-val">3 sem.</span><span class="stat-label">Primeiro insight</span></div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-badge">Diagnóstico rápido</span>
+      <h2 class="section-title">Você reconhece alguma dessas situações?</h2>
+      <p class="section-desc">Clique na dor que mais se parece com a realidade da sua empresa e veja as soluções que a Exactus entrega.</p>
+    </div>
+
+    <div class="dores-grid">
+      <button class="dor-card" onclick="openDor('caixa')" id="dor-caixa">
+        <span class="dor-num">01</span>
+        <div class="dor-title">Cresce, mas não gera caixa</div>
+        <p class="dor-desc">A receita sobe, mas o caixa não acompanha. Sem visibilidade dos dados, é impossível saber onde o dinheiro está sumindo.</p>
+        <span class="dor-arrow">→</span>
+      </button>
+      <button class="dor-card" onclick="openDor('margem')" id="dor-margem">
+        <span class="dor-num">02</span>
+        <div class="dor-title">Não sabe onde perde dinheiro</div>
+        <p class="dor-desc">Produtos com margem negativa, clientes que custam mais do que pagam, canais que drenam verba. Tudo invisível, por meses.</p>
+        <span class="dor-arrow">→</span>
+      </button>
+      <button class="dor-card" onclick="openDor('achismo')" id="dor-achismo">
+        <span class="dor-num">03</span>
+        <div class="dor-title">Planejamento feito no achismo</div>
+        <p class="dor-desc">Sem forecast confiável, a empresa reage tarde demais — e perde oportunidades ou entra em crise de caixa desnecessária.</p>
+        <span class="dor-arrow">→</span>
+      </button>
+      <button class="dor-card" onclick="openDor('dados')" id="dor-dados">
+        <span class="dor-num">04</span>
+        <div class="dor-title">Dados que ninguém confia</div>
+        <p class="dor-desc">Planilhas em todo lugar, sistemas que não conversam, relatórios que se contradizem. Reuniões que não decidem nada.</p>
+        <span class="dor-arrow">→</span>
+      </button>
+    </div>
+
+    <!-- DOR PANELS -->
+    <div class="dor-service-panel" id="dsp-caixa">
+      <span class="dsp-tag">Solução recomendada · Serviço 01 + 03</span>
+      <h3 class="dsp-title">Data Diagnosis + Smart Analytics</h3>
+      <p class="dsp-desc">Em 3 semanas mapeamos onde o dinheiro está vazando. Depois, monitoramos em tempo real para que nunca mais você descubra o problema no fechamento.</p>
+      <div class="dsp-items">
+        <div class="dsp-item">Raio-X completo do fluxo de caixa em 21 dias</div>
+        <div class="dsp-item">Identificação dos 3 maiores vazamentos de margem</div>
+        <div class="dsp-item">Dashboard executivo com alertas automáticos</div>
+        <div class="dsp-item">ROI mínimo garantido de 3× o investimento</div>
+      </div>
+      <div class="dsp-btns">
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" onclick="showPage('servicos')">Saiba mais sobre os serviços</button>
+      </div>
+    </div>
+
+    <div class="dor-service-panel" id="dsp-margem">
+      <span class="dsp-tag">Solução recomendada · Serviço 01 + 06</span>
+      <h3 class="dsp-title">Data Diagnosis + Value Projects</h3>
+      <p class="dsp-desc">Descobrimos onde sua empresa está perdendo dinheiro com número na mesa — e entregamos a solução com ROI atrelado ao resultado real.</p>
+      <div class="dsp-items">
+        <div class="dsp-item">Margem real por produto, cliente e canal</div>
+        <div class="dsp-item">Identificação de SKUs e contratos deficitários</div>
+        <div class="dsp-item">Modelo de precificação baseado em dado</div>
+        <div class="dsp-item">Pagamento parcial atrelado ao resultado</div>
+      </div>
+      <div class="dsp-btns">
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" onclick="showPage('servicos')">Saiba mais sobre os serviços</button>
+      </div>
+    </div>
+
+    <div class="dor-service-panel" id="dsp-achismo">
+      <span class="dsp-tag">Solução recomendada · Serviço 04 + 07</span>
+      <h3 class="dsp-title">BI Pro + Decision Lab + Forecast Inteligente</h3>
+      <p class="dsp-desc">Machine learning aplicado ao seu histórico para prever demanda, caixa e churn antes que virem problema. Decisão antecipada, não reativa.</p>
+      <div class="dsp-items">
+        <div class="dsp-item">Forecast de caixa com 90 dias de horizonte</div>
+        <div class="dsp-item">Previsão de demanda por produto e sazonalidade</div>
+        <div class="dsp-item">Simulação de cenários antes de decidir</div>
+        <div class="dsp-item">Alerta preditivo de risco antes que aconteça</div>
+      </div>
+      <div class="dsp-btns">
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" onclick="showPage('servicos')">Saiba mais sobre os serviços</button>
+      </div>
+    </div>
+
+    <div class="dor-service-panel" id="dsp-dados">
+      <span class="dsp-tag">Solução recomendada · Serviço 02 + 05</span>
+      <h3 class="dsp-title">Data Foundation + Data Culture</h3>
+      <p class="dsp-desc">Conectamos todos os sistemas, unificamos os dados e treinamos o time para tomar decisões com dados. Fim das planilhas contraditórias.</p>
+      <div class="dsp-items">
+        <div class="dsp-item">Infraestrutura em nuvem com sistemas integrados</div>
+        <div class="dsp-item">Uma fonte única de verdade para toda a empresa</div>
+        <div class="dsp-item">Gestores autônomos para consultar dados</div>
+        <div class="dsp-item">Cultura de decisão baseada em evidência</div>
+      </div>
+      <div class="dsp-btns">
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" onclick="showPage('servicos')">Saiba mais sobre os serviços</button>
+      </div>
+    </div>
+
+    <!-- PROOF -->
+    <div class="proof-section">
+      <span class="section-badge">Resultados reais</span>
+      <h2 class="section-title">O que nossos clientes dizem</h2>
+      <div class="proof-grid">
+        <div class="proof-card">
+          <p class="proof-quote">"Em 3 semanas a Exactus descobriu que estávamos perdendo R$ 380k por ano em produtos que achávamos lucrativos. Nunca mais tomamos decisão sem dado."</p>
+          <div class="proof-author"><strong>Ricardo M.</strong>CEO · Indústria Manufatureira · Campinas</div>
+        </div>
+        <div class="proof-card">
+          <p class="proof-quote">"O dashboard que a Exactus entregou transformou nossas reuniões. Antes discutíamos opinião, agora discutimos o que o dado mostra. Muito mais produtivo."</p>
+          <div class="proof-author"><strong>Ana Paula T.</strong>CFO · Rede de Clínicas · São Paulo</div>
+        </div>
+        <div class="proof-card">
+          <p class="proof-quote">"Reduzimos o custo de estoque em 23% usando o modelo preditivo deles. O ROI do projeto pagou o investimento em menos de 2 meses."</p>
+          <div class="proof-author"><strong>Marcos F.</strong>Diretor de Operações · Distribuidora · Interior SP</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-banner">
+      <h2 class="cta-banner-title">Pronto para tomar decisões com dados?</h2>
+      <p class="cta-banner-desc">Começamos com uma conversa de 30 minutos — gratuita e sem compromisso.<br>Você sai com clareza sobre qual serviço faz sentido para o seu momento.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('contato')">Agendar conversa gratuita — 30 min</button>
+        <button class="btn-secondary" onclick="showPage('servicos')">Conhecer os serviços primeiro</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ SOBRE ══════════════════ -->
+<div class="page" id="page-sobre">
+  <div class="container">
+
+    <div class="sobre-hero">
+      <div>
+        <span class="sobre-label">Quem somos</span>
+        <h1 class="sobre-title">Nascemos para resolver<br>o problema que o <em>mercado ignora</em></h1>
+        <p class="sobre-desc">A maioria das empresas já tem os dados que precisa para tomar decisões melhores. O problema é que ninguém traduz esses dados em ação. A Exactus nasceu exatamente para preencher essa lacuna — com velocidade, linguagem de negócio e ROI comprovado.</p>
+      </div>
+      <div class="sobre-visual">
+        <div class="sv-item">
+          <div class="sv-icon" style="background:rgba(59,142,240,0.15);border:1px solid rgba(59,142,240,0.3);">🎯</div>
+          <div class="sv-text"><strong>Foco em resultado, não em relatório</strong>Entregamos decisão com número na mesa, não slides bonitos sem ação.</div>
+        </div>
+        <div class="sv-item">
+          <div class="sv-icon" style="background:rgba(201,151,58,0.12);border:1px solid rgba(201,151,58,0.3);">⚡</div>
+          <div class="sv-text"><strong>Velocidade que o mercado não entrega</strong>Primeiro insight em 3 semanas. Não em 6 meses de consultoria.</div>
+        </div>
+        <div class="sv-item">
+          <div class="sv-icon" style="background:rgba(109,191,138,0.12);border:1px solid rgba(109,191,138,0.3);">💬</div>
+          <div class="sv-text"><strong>Linguagem do dono, não do TI</strong>Falamos com o CEO e o CFO. Traduzimos dado em decisão de negócio.</div>
+        </div>
+        <div class="sv-item">
+          <div class="sv-icon" style="background:rgba(240,90,60,0.1);border:1px solid rgba(240,90,60,0.25);">📊</div>
+          <div class="sv-text"><strong>ROI no contrato, não na promessa</strong>Propomos com retorno estimado. Você sabe o que ganha antes de pagar.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mvv-grid">
+      <div class="mvv-card">
+        <span class="mvv-icon">🧭</span>
+        <span class="mvv-label">Missão</span>
+        <h3 class="mvv-title">Transformar dados em decisões</h3>
+        <p class="mvv-desc">Tornar a inteligência de dados acessível para empresas que precisam de resultado real — não para as que já têm time de data science.</p>
+      </div>
+      <div class="mvv-card">
+        <span class="mvv-icon">🔭</span>
+        <span class="mvv-label">Visão</span>
+        <h3 class="mvv-title">Ser o parceiro de dados do mid-market brasileiro</h3>
+        <p class="mvv-desc">Até 2030, ser referência nacional em analytics aplicado para empresas de R$ 10M a R$ 800M — o segmento que mais cresce e menos é atendido.</p>
+      </div>
+      <div class="mvv-card" style="border-color:rgba(201,151,58,0.2);">
+        <span class="mvv-icon">🏛️</span>
+        <span class="mvv-label">Valores</span>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:4px;">
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:32px;height:32px;border-radius:8px;background:rgba(201,151,58,0.12);border:1px solid rgba(201,151,58,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">⚓</div>
+            <div><strong style="color:var(--white);font-size:14px;display:block;margin-bottom:3px;">Estabilidade</strong><span style="font-size:12px;color:var(--gray);line-height:1.5;">Construímos relações e soluções duradouras. Não vendemos projetos — construímos fundações.</span></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:32px;height:32px;border-radius:8px;background:rgba(59,142,240,0.12);border:1px solid rgba(59,142,240,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🔷</div>
+            <div><strong style="color:var(--white);font-size:14px;display:block;margin-bottom:3px;">Integridade</strong><span style="font-size:12px;color:var(--gray);line-height:1.5;">Falamos o que o dado mostra, mesmo quando não é o que o cliente quer ouvir. Sempre.</span></div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:32px;height:32px;border-radius:8px;background:rgba(109,191,138,0.12);border:1px solid rgba(109,191,138,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🏆</div>
+            <div><strong style="color:var(--white);font-size:14px;display:block;margin-bottom:3px;">Orgulho</strong><span style="font-size:12px;color:var(--gray);line-height:1.5;">Entregamos trabalho do qual nos orgulhamos. Se não está no nosso padrão, não sai.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="team-section">
+      <span class="section-badge">Liderança</span>
+      <h2 class="section-title">As pessoas por trás dos dados</h2>
+      <div class="team-grid">
+
+        <div class="team-card tc-blue">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#1E5FBF,#0D1F3C);border:2px solid rgba(59,142,240,0.5);">
+            <span class="team-initials">GV</span>
+          </div>
+          <div class="team-name">Gustavo Vieira</div>
+          <span class="team-role">CEO · CFO</span>
+          <div class="team-divider"></div>
+          <div class="team-edu">
+            <div class="team-edu-item"><span class="team-edu-degree">Economia</span><span class="team-edu-school">PUC-Campinas</span></div>
+            <div class="team-edu-item"><span class="team-edu-degree">MBA Finanças &amp; Gestão Estratégica e Econômica de Negócios</span><span class="team-edu-school">FGV-Campinas</span></div>
+          </div>
+        </div>
+
+        <div class="team-card tc-gold">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#8B6914,#0D1F3C);border:2px solid rgba(201,151,58,0.5);">
+            <span class="team-initials">TA</span>
+          </div>
+          <div class="team-name">Thiago Arraval</div>
+          <span class="team-role">CRO</span>
+          <div class="team-divider"></div>
+          <div class="team-edu">
+            <div class="team-edu-item"><span class="team-edu-degree">Engenharia de Telecomunicações</span><span class="team-edu-school">UNISAL</span></div>
+            <div class="team-edu-item"><span class="team-edu-degree">MBA em Administração</span><span class="team-edu-school">FGV-Campinas</span></div>
+          </div>
+        </div>
+
+        <div class="team-card tc-green">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#1A6B3C,#0D1F3C);border:2px solid rgba(109,191,138,0.5);">
+            <span class="team-initials">L</span>
+          </div>
+          <div class="team-name">Leandro</div>
+          <span class="team-role">CDO</span>
+          <div class="team-divider"></div>
+          <div class="team-edu">
+            <div class="team-edu-item"><span class="team-edu-degree">Estatística</span><span class="team-edu-school">UNICAMP</span></div>
+            <div class="team-edu-item"><span class="team-edu-degree">Pós-Graduação em Ciência de Dados</span><span class="team-edu-school">ITA</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="squad-section">
+      <div class="squad-header">
+        <div>
+          <span class="section-badge">Time especializado</span>
+          <h2 class="section-title" style="margin-bottom:0;">Nossos squads</h2>
+        </div>
+        <p style="font-size:13px;color:var(--gray);max-width:320px;text-align:right;line-height:1.6;">Profissionais selecionados por especialidade e alocados conforme o escopo de cada projeto.</p>
+      </div>
+
+      <div class="squad-tags" style="margin-bottom:24px;">
+        <div class="squad-tag"><div class="squad-tag-dot" style="background:var(--accent);"></div>Dados &amp; Engenharia</div>
+        <div class="squad-tag"><div class="squad-tag-dot" style="background:var(--gold2);"></div>Inteligência Artificial</div>
+        <div class="squad-tag"><div class="squad-tag-dot" style="background:#6DBF8A;"></div>FP&amp;A &amp; Finanças</div>
+        <div class="squad-tag"><div class="squad-tag-dot" style="background:#C0A8F8;"></div>Business Intelligence</div>
+        <div class="squad-tag"><div class="squad-tag-dot" style="background:#F08070;"></div>Negócios &amp; Estratégia</div>
+      </div>
+
+      <div class="squad-strip">
+        <div class="squad-col">
+          <span class="squad-col-label">Dados &amp; Engenharia</span>
+          <span class="squad-skill">Engenharia de Dados</span>
+          <span class="squad-skill">Arquitetura em Nuvem</span>
+          <span class="squad-skill">Pipelines ETL/ELT</span>
+          <span class="squad-skill">Data Warehouse</span>
+          <span class="squad-skill">Governança de Dados</span>
+        </div>
+        <div class="squad-col">
+          <span class="squad-col-label">IA &amp; Machine Learning</span>
+          <span class="squad-skill">Modelos Preditivos</span>
+          <span class="squad-skill">NLP &amp; Linguagem</span>
+          <span class="squad-skill">Automação com IA</span>
+          <span class="squad-skill">Computer Vision</span>
+          <span class="squad-skill">MLOps &amp; Deploy</span>
+        </div>
+        <div class="squad-col">
+          <span class="squad-col-label">FP&amp;A &amp; Analytics</span>
+          <span class="squad-skill">Modelagem Financeira</span>
+          <span class="squad-skill">Forecast &amp; Budget</span>
+          <span class="squad-skill">Análise de Margem</span>
+          <span class="squad-skill">BI &amp; Dashboards</span>
+          <span class="squad-skill">KPIs &amp; OKRs</span>
+        </div>
+        <div class="squad-col">
+          <span class="squad-col-label">Negócios &amp; Estratégia</span>
+          <span class="squad-skill">Gestão de Projetos</span>
+          <span class="squad-skill">Change Management</span>
+          <span class="squad-skill">Go-to-Market</span>
+          <span class="squad-skill">Precificação Estratégica</span>
+          <span class="squad-skill">Expansão Comercial</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-banner">
+      <h2 class="cta-banner-title">Quer conhecer a equipe pessoalmente?</h2>
+      <p class="cta-banner-desc">Uma conversa de 30 minutos é suficiente para entender se a Exactus é o parceiro certo para você.</p>
+      <button class="btn-primary" onclick="showPage('contato')">Agendar conversa gratuita</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ SERVIÇOS ══════════════════ -->
+<div class="page" id="page-servicos">
+  <div class="container">
+
+    <div class="servicos-hero">
+      <span class="section-badge">Portfólio completo</span>
+      <h1 class="section-title" style="font-family:'DM Serif Display',serif;font-size:clamp(28px,5vw,48px);">Escolha o seu <em style="font-style:italic;color:var(--gold2);">momento</em></h1>
+      <p class="section-desc">Cada empresa está num estágio diferente com dados. Selecione o serviço que faz sentido para onde você está agora.</p>
+      <div class="svc-instruction">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        Clique em um serviço para ver os detalhes
+      </div>
+    </div>
+
+    <div class="svc-grid">
+      <button class="svc-btn" onclick="openService('diag')" id="sbtn-diag">
+        <span class="svc-num">Serviço 01</span>
+        <span class="svc-name">Data Diagnosis</span>
+        <span class="svc-tagline">Raio-X completo em 2–3 semanas. Onde você perde dinheiro.</span>
+        <span class="svc-badge" style="background:rgba(59,142,240,0.15);color:#7FB8F8;border:1px solid rgba(59,142,240,0.3)">Porta de entrada</span>
+      </button>
+      <button class="svc-btn" onclick="openService('found')" id="sbtn-found">
+        <span class="svc-num">Serviço 02</span>
+        <span class="svc-name">Data Foundation</span>
+        <span class="svc-tagline">Infraestrutura de dados em nuvem. Sistemas conectados automaticamente.</span>
+        <span class="svc-badge" style="background:rgba(109,191,138,0.12);color:#6DBF8A;border:1px solid rgba(109,191,138,0.3)">Infra &amp; integração</span>
+      </button>
+      <button class="svc-btn" onclick="openService('smart')" id="sbtn-smart">
+        <span class="svc-num">Serviço 03</span>
+        <span class="svc-name">Smart Analytics</span>
+        <span class="svc-tagline">Dashboards executivos com alertas. Decisão antes que seja tarde.</span>
+        <span class="svc-badge" style="background:rgba(201,151,58,0.12);color:#F0BC5A;border:1px solid rgba(201,151,58,0.3)">Recorrente · MRR</span>
+      </button>
+      <button class="svc-btn" onclick="openService('bi')" id="sbtn-bi">
+        <span class="svc-num">Serviço 04</span>
+        <span class="svc-name">BI Pro + Decision Lab</span>
+        <span class="svc-tagline">Machine learning para prever churn e demanda. Simule antes de decidir.</span>
+        <span class="svc-badge" style="background:rgba(160,130,230,0.12);color:#C0A8F8;border:1px solid rgba(160,130,230,0.3)">Preditivo · Premium</span>
+      </button>
+      <button class="svc-btn" onclick="openService('cult')" id="sbtn-cult">
+        <span class="svc-num">Serviço 05</span>
+        <span class="svc-name">Data Culture</span>
+        <span class="svc-tagline">Qualquer gestor faz perguntas e recebe respostas dos dados. Sem analista.</span>
+        <span class="svc-badge" style="background:rgba(109,191,138,0.12);color:#6DBF8A;border:1px solid rgba(109,191,138,0.3)">Transformação</span>
+      </button>
+      <button class="svc-btn" onclick="openService('vp')" id="sbtn-vp">
+        <span class="svc-num">Serviço 06</span>
+        <span class="svc-name">Value Projects</span>
+        <span class="svc-tagline">Projetos de alto impacto: precificação, margem, estoque. ROI atrelado.</span>
+        <span class="svc-badge" style="background:rgba(240,90,60,0.1);color:#F08070;border:1px solid rgba(240,90,60,0.25)">Alto impacto</span>
+      </button>
+      <button class="svc-btn" onclick="openService('ai')" id="sbtn-ai">
+        <span class="svc-num">Serviço 07</span>
+        <span class="svc-name">AI Automation</span>
+        <span class="svc-tagline">Automação de processos com IA. Tarefas repetitivas viram fluxo automático.</span>
+        <span class="svc-badge" style="background:rgba(201,151,58,0.12);color:#F0BC5A;border:1px solid rgba(201,151,58,0.3)">IA aplicada</span>
+      </button>
+      <button class="svc-btn" onclick="openService('ret')" id="sbtn-ret">
+        <span class="svc-num">Serviço 08</span>
+        <span class="svc-name">Analytics Retainer</span>
+        <span class="svc-tagline">Parceria mensal contínua. CFO de dados do seu lado todo mês.</span>
+        <span class="svc-badge" style="background:rgba(59,142,240,0.15);color:#7FB8F8;border:1px solid rgba(59,142,240,0.3)">MRR · Parceria</span>
+      </button>
+    </div>
+
+    <!-- PANEL DIAG -->
+    <div id="spanel-diag" class="panel-wrap">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <span class="panel-num">Serviço 01 · Projeto pontual</span>
+          <h3 class="panel-title">Data Diagnosis</h3>
+          <p class="panel-desc">Raio-X completo do negócio em até 3 semanas. Você descobre onde perde dinheiro e quais são as maiores alavancas de resultado — com número na mesa.</p>
+        </div>
+        <div class="panel-kpis">
+          <div class="panel-kpi"><span class="panel-kpi-val">21 dias</span><span class="panel-kpi-label">Prazo máx.</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">R$ 8–18k</span><span class="panel-kpi-label">Investimento</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">3× garantia</span><span class="panel-kpi-label">ROI mínimo</span></div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTab('diag','fases',this)">Fases</button>
+        <button class="ptab" onclick="switchTab('diag','entregaveis',this)">Entregáveis</button>
+        <button class="ptab" onclick="switchTab('diag','quando',this)">Quando contratar</button>
+        <button class="ptab" onclick="switchTab('diag','riscos',this)">Riscos</button>
+      </div>
+      <div class="panel-body">
+        <div id="diag-fases" class="ptab-content active">
+          <div class="phases">
+            <div class="phase">
+              <div class="phase-circle" style="background:rgba(59,142,240,0.12);border-color:rgba(59,142,240,0.3);color:#7FB8F8">1</div>
+              <div class="phase-body">
+                <div class="phase-title">Kickoff e mapeamento</div>
+                <span class="phase-prazo">Dias 1–2</span>
+                <div class="phase-desc">Reunião de alinhamento, levantamento de sistemas, confirmação de acessos e definição do cronograma.</div>
+                <div class="checklist"><span class="chk">Escopo documentado e assinado</span><span class="chk">Acesso aos sistemas confirmado</span></div>
+                <span class="owner-tag ow-both">Ambos os sócios</span>
+              </div>
+            </div>
+            <div class="phase">
+              <div class="phase-circle" style="background:rgba(59,142,240,0.12);border-color:rgba(59,142,240,0.3);color:#7FB8F8">2</div>
+              <div class="phase-body">
+                <div class="phase-title">Auditoria e extração de dados</div>
+                <span class="phase-prazo">Dias 3–8</span>
+                <div class="phase-desc">Conexão com ERP e sistemas via API. Limpeza, padronização e estruturação. Relatório de qualidade de dados.</div>
+                <div class="checklist"><span class="chk">Dados extraídos e organizados</span><span class="chk">Inconsistências mapeadas</span></div>
+                <span class="owner-tag ow-tec">Sócio técnico (lead)</span>
+              </div>
+            </div>
+            <div class="phase">
+              <div class="phase-circle" style="background:rgba(109,191,138,0.12);border-color:rgba(109,191,138,0.3);color:#6DBF8A">3</div>
+              <div class="phase-body">
+                <div class="phase-title">Análise e diagnóstico</div>
+                <span class="phase-prazo">Dias 9–16</span>
+                <div class="phase-desc">Análise profunda: margem real, custos invisíveis, padrões de perda. Construção do modelo financeiro.</div>
+                <div class="checklist"><span class="chk">Modelo financeiro construído</span><span class="chk">Top 5 alavancas identificadas com valor</span></div>
+                <span class="owner-tag ow-biz">Sócio de negócios (lead)</span>
+              </div>
+            </div>
+            <div class="phase">
+              <div class="phase-circle" style="background:rgba(109,191,138,0.12);border-color:rgba(109,191,138,0.3);color:#6DBF8A">4</div>
+              <div class="phase-body">
+                <div class="phase-title">Apresentação executiva</div>
+                <span class="phase-prazo">Dias 17–21</span>
+                <div class="phase-desc">Apresentação ao CEO/CFO com número na mesa, plano de ação priorizado e próximos passos concretos.</div>
+                <div class="checklist"><span class="chk">Apresentação executiva entregue</span><span class="chk">Roadmap de próximas ações</span></div>
+                <span class="owner-tag ow-both">Ambos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="diag-entregaveis" class="ptab-content">
+          <div class="deliverables">
+            <div class="del-item">Relatório de diagnóstico financeiro completo</div>
+            <div class="del-item">Mapa de onde a empresa perde dinheiro</div>
+            <div class="del-item">Top 5 alavancas com impacto estimado em R$</div>
+            <div class="del-item">Dashboard de visão geral do negócio</div>
+            <div class="del-item">Roadmap de iniciativas priorizadas por ROI</div>
+            <div class="del-item">Relatório de qualidade e maturidade de dados</div>
+          </div>
+        </div>
+        <div id="diag-quando" class="ptab-content">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>"Crescemos mas o caixa não acompanha"</strong> — sintoma clássico de margem invisível</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Dono que decide no instinto</strong> mas sabe que precisa de dado para continuar crescendo</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Empresa com R$5M–200M de receita</strong> que nunca fez uma análise estruturada dos próprios dados</div></div>
+          </div>
+        </div>
+        <div id="diag-riscos" class="ptab-content">
+          <div class="risks">
+            <div class="risk-item"><span class="risk-icon">⚠</span><div><strong style="color:var(--gold2)">Dados muito fragmentados:</strong> se a empresa não tem nenhum sistema rodando, o diagnóstico pode levar mais tempo. Mapeamos isso antes de assinar.</div></div>
+            <div class="risk-item"><span class="risk-icon">⚠</span><div><strong style="color:var(--gold2)">Dono não participativo:</strong> sem o decisor engajado nas reuniões-chave, as descobertas não viram ação. Confirmamos o nível de engajamento no kickoff.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cta-bar">
+        <p>Pronto para descobrir onde sua empresa está perdendo dinheiro?</p>
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" style="padding:10px 18px;font-size:13px;" onclick="showPage('contato')">Saiba mais</button>
+      </div>
+    </div>
+
+    <!-- PANEL FOUND -->
+    <div id="spanel-found" class="panel-wrap">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <span class="panel-num">Serviço 02 · Infraestrutura</span>
+          <h3 class="panel-title">Data Foundation</h3>
+          <p class="panel-desc">Construímos a base de dados da empresa do zero. ERP, CRM, financeiro e operacional todos conectados em uma plataforma em nuvem, atualizando automaticamente.</p>
+        </div>
+        <div class="panel-kpis">
+          <div class="panel-kpi"><span class="panel-kpi-val">4–10 sem.</span><span class="panel-kpi-label">Duração</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">R$ 15–45k</span><span class="panel-kpi-label">Investimento</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">100%</span><span class="panel-kpi-label">Automatizado</span></div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTab('found','entregaveis',this)">Entregáveis</button>
+        <button class="ptab" onclick="switchTab('found','quando',this)">Quando contratar</button>
+        <button class="ptab" onclick="switchTab('found','riscos',this)">Riscos</button>
+      </div>
+      <div class="panel-body">
+        <div id="found-entregaveis" class="ptab-content active">
+          <div class="deliverables">
+            <div class="del-item">Data warehouse em nuvem configurado</div>
+            <div class="del-item">Pipelines de dados automáticos (ETL)</div>
+            <div class="del-item">Integração com ERP, CRM e sistemas financeiros</div>
+            <div class="del-item">Dicionário de dados e documentação técnica</div>
+            <div class="del-item">Uma fonte única de verdade para toda a empresa</div>
+            <div class="del-item">Monitoramento de qualidade dos dados</div>
+          </div>
+        </div>
+        <div id="found-quando" class="ptab-content">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Dados espalhados</strong> em múltiplos sistemas que não se conversam</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Relatórios manuais</strong> que consomem horas toda semana para montar</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Pré-requisito para Smart Analytics</strong> — empresa que quer dashboards automatizados precisa desta fundação</div></div>
+          </div>
+        </div>
+        <div id="found-riscos" class="ptab-content">
+          <div class="risks">
+            <div class="risk-item"><span class="risk-icon">⚠</span><div><strong style="color:var(--gold2)">Sistemas muito antigos:</strong> ERPs legados ou sistemas sem API podem aumentar o prazo. Fazemos inventário técnico antes de propor.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cta-bar">
+        <p>Quer conectar todos os seus dados em uma plataforma única?</p>
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" style="padding:10px 18px;font-size:13px;" onclick="showPage('contato')">Saiba mais</button>
+      </div>
+    </div>
+
+    <!-- PANEL SMART -->
+    <div id="spanel-smart" class="panel-wrap">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <span class="panel-num">Serviço 03 · Recorrente · MRR</span>
+          <h3 class="panel-title">Smart Analytics</h3>
+          <p class="panel-desc">Dashboards executivos atualizados automaticamente com alertas inteligentes. Você é notificado quando algo sai do padrão — antes de virar problema.</p>
+        </div>
+        <div class="panel-kpis">
+          <div class="panel-kpi"><span class="panel-kpi-val">R$ 3–8k</span><span class="panel-kpi-label">/mês</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">7 dias</span><span class="panel-kpi-label">Implantação</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">24/7</span><span class="panel-kpi-label">Monitoramento</span></div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTab('smart','entregaveis',this)">Entregáveis</button>
+        <button class="ptab" onclick="switchTab('smart','quando',this)">Quando contratar</button>
+      </div>
+      <div class="panel-body">
+        <div id="smart-entregaveis" class="ptab-content active">
+          <div class="deliverables">
+            <div class="del-item">Dashboards executivos por área (financeiro, comercial, operacional)</div>
+            <div class="del-item">Alertas automáticos por WhatsApp ou e-mail</div>
+            <div class="del-item">KPIs customizados para o seu negócio</div>
+            <div class="del-item">Atualização automática diária ou em tempo real</div>
+            <div class="del-item">Reunião mensal de revisão de performance</div>
+            <div class="del-item">Suporte e ajustes incluídos no retainer</div>
+          </div>
+        </div>
+        <div id="smart-quando" class="ptab-content">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Empresa que já fez o Data Diagnosis</strong> e quer monitorar as métricas identificadas</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>CEO/CFO que toma decisão no feeling</strong> por falta de painel confiável e atualizado</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Empresa com Data Foundation implantada</strong> pronta para extrair valor dos dados</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cta-bar">
+        <p>Quer ser avisado quando algo sair do padrão antes de virar problema?</p>
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" style="padding:10px 18px;font-size:13px;" onclick="showPage('contato')">Saiba mais</button>
+      </div>
+    </div>
+
+    <!-- PANEL BI -->
+    <div id="spanel-bi" class="panel-wrap">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <span class="panel-num">Serviço 04 · Preditivo · Premium</span>
+          <h3 class="panel-title">BI Pro + Decision Lab</h3>
+          <p class="panel-desc">Machine learning aplicado ao seu histórico para prever churn, demanda e caixa. Simulador de cenários para você testar decisões antes de implementar.</p>
+        </div>
+        <div class="panel-kpis">
+          <div class="panel-kpi"><span class="panel-kpi-val">8–16 sem.</span><span class="panel-kpi-label">Implantação</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">R$ 30–80k</span><span class="panel-kpi-label">Investimento</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">ML nativo</span><span class="panel-kpi-label">Tecnologia</span></div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTab('bi','entregaveis',this)">Entregáveis</button>
+        <button class="ptab" onclick="switchTab('bi','quando',this)">Quando contratar</button>
+        <button class="ptab" onclick="switchTab('bi','riscos',this)">Riscos</button>
+      </div>
+      <div class="panel-body">
+        <div id="bi-entregaveis" class="ptab-content active">
+          <div class="deliverables">
+            <div class="del-item">Modelo preditivo de churn de clientes</div>
+            <div class="del-item">Forecast de demanda por produto e sazonalidade</div>
+            <div class="del-item">Previsão de caixa com 90 dias de horizonte</div>
+            <div class="del-item">Simulador de cenários estratégicos</div>
+            <div class="del-item">Score de risco por cliente ou pedido</div>
+            <div class="del-item">Recomendações automáticas de ação</div>
+          </div>
+        </div>
+        <div id="bi-quando" class="ptab-content">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Empresa com histórico de dados organizado</strong> — mínimo 12 meses de dados limpos</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Decisões estratégicas frequentes</strong> que precisam de suporte quantitativo robusto</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Churn ou demanda imprevisíveis</strong> gerando perda de receita ou excesso de estoque</div></div>
+          </div>
+        </div>
+        <div id="bi-riscos" class="ptab-content">
+          <div class="risks">
+            <div class="risk-item"><span class="risk-icon">⚠</span><div><strong style="color:var(--gold2)">Volume de dados insuficiente:</strong> modelos de ML precisam de histórico mínimo. Avaliamos a viabilidade antes de propor.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cta-bar">
+        <p>Quer prever o futuro do seu negócio antes de decidir?</p>
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" style="padding:10px 18px;font-size:13px;" onclick="showPage('contato')">Saiba mais</button>
+      </div>
+    </div>
+
+    <!-- PANEL CULT -->
+    <div id="spanel-cult" class="panel-wrap">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <span class="panel-num">Serviço 05 · Transformação</span>
+          <h3 class="panel-title">Data Culture</h3>
+          <p class="panel-desc">Transformamos a cultura da empresa para que qualquer gestor consiga fazer perguntas e receber respostas dos dados — sem precisar de analista.</p>
+        </div>
+        <div class="panel-kpis">
+          <div class="panel-kpi"><span class="panel-kpi-val">3–6 meses</span><span class="panel-kpi-label">Duração</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">R$ 12–30k</span><span class="panel-kpi-label">Investimento</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">100%</span><span class="panel-kpi-label">Autonomia</span></div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTab('cult','entregaveis',this)">Entregáveis</button>
+        <button class="ptab" onclick="switchTab('cult','quando',this)">Quando contratar</button>
+        <button class="ptab" onclick="switchTab('cult','riscos',this)">Riscos</button>
+      </div>
+      <div class="panel-body">
+        <div id="cult-entregaveis" class="ptab-content active">
+          <div class="deliverables">
+            <div class="del-item">Programa de treinamento para gestores e líderes</div>
+            <div class="del-item">Rituais de decisão com dados implementados</div>
+            <div class="del-item">Biblioteca de análises self-service</div>
+            <div class="del-item">Manual de governança de dados interno</div>
+            <div class="del-item">Mapa de maturidade analítica por área</div>
+            <div class="del-item">NPS interno mensurado ao longo do projeto</div>
+          </div>
+        </div>
+        <div id="cult-quando" class="ptab-content">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>"Temos dashboards mas ninguém usa"</strong> — o problema é cultural, não técnico</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>CEO ou RH patrocinando ativamente</strong> a mudança — sem sponsor de cima não funciona</div></div>
+            <div class="quando-item"><div class="quando-dot" style="background:var(--gold2)"></div><div class="quando-text" style="color:var(--gold2)"><strong>Pré-requisito:</strong> dados razoavelmente organizados e liderança genuinamente comprometida</div></div>
+          </div>
+        </div>
+        <div id="cult-riscos" class="ptab-content">
+          <div class="risks">
+            <div class="risk-item"><span class="risk-icon">⚠</span><div><strong style="color:var(--gold2)">Sem sponsor ativo:</strong> sem o CEO engajado, o projeto morre no mês 2. Confirmamos o nível de comprometimento antes de assinar.</div></div>
+            <div class="risk-item"><span class="risk-icon">⚠</span><div><strong style="color:var(--gold2)">Resistência do gestor médio:</strong> normal e esperada. Mapeamos os campeões internos e trabalhamos de dentro para fora.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cta-bar">
+        <p>Quer que toda a sua equipe tome decisões com dados?</p>
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" style="padding:10px 18px;font-size:13px;" onclick="showPage('contato')">Saiba mais</button>
+      </div>
+    </div>
+
+    <!-- PANEL VP -->
+    <div id="spanel-vp" class="panel-wrap">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <span class="panel-num">Serviço 06 · Alto impacto</span>
+          <h3 class="panel-title">Value Projects</h3>
+          <p class="panel-desc">Projetos cirúrgicos com ROI atrelado ao resultado. Precificação inteligente, redução de desperdício, otimização de margem. Você paga sobre o que ganha.</p>
+        </div>
+        <div class="panel-kpis">
+          <div class="panel-kpi"><span class="panel-kpi-val">4–12 sem.</span><span class="panel-kpi-label">Duração</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">R$ 20–80k</span><span class="panel-kpi-label">Investimento</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">60/20/20</span><span class="panel-kpi-label">Modelo pagamento</span></div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTab('vp','modelo',this)">Modelo financeiro</button>
+        <button class="ptab" onclick="switchTab('vp','quando',this)">Quando contratar</button>
+        <button class="ptab" onclick="switchTab('vp','riscos',this)">Riscos</button>
+      </div>
+      <div class="panel-body">
+        <div id="vp-modelo" class="ptab-content active">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot" style="background:var(--gold2)"></div><div class="quando-text"><strong>60% na assinatura do contrato</strong> — garante comprometimento de ambos os lados</div></div>
+            <div class="quando-item"><div class="quando-dot" style="background:var(--gold2)"></div><div class="quando-text"><strong>20% na entrega da solução técnica</strong> — quando o trabalho está implementado</div></div>
+            <div class="quando-item"><div class="quando-dot" style="background:var(--gold2)"></div><div class="quando-text"><strong>20% após 90 dias</strong> — atrelado ao resultado acordado e medido no baseline</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Por que esse modelo?</strong> Alinha incentivo, reduz objeção de preço e diferencia da concorrência — nenhum freelancer faz fee atrelado ao resultado.</div></div>
+          </div>
+        </div>
+        <div id="vp-quando" class="ptab-content">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>"Nossa margem caiu X pp e não sabemos por quê"</strong> — problema específico com número</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Estoque descontrolado</strong> travando o caixa com desperdício mensurável</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Precificação manual por planilha</strong> — algoritmo pode recalcular automaticamente</div></div>
+          </div>
+        </div>
+        <div id="vp-riscos" class="ptab-content">
+          <div class="risks">
+            <div class="risk-item"><span class="risk-icon">⚠</span><div><strong style="color:var(--gold2)">Métrica mal definida:</strong> vira conflito na hora de cobrar a parcela de sucesso. Obsessão com clareza do baseline antes de assinar.</div></div>
+            <div class="risk-item"><span class="risk-icon">⚠</span><div><strong style="color:var(--gold2)">Escopo muito amplo:</strong> se a dor for vaga, começamos com Data Diagnosis para delimitar o problema antes de propor o Value Project.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cta-bar">
+        <p>Quer um projeto de alto impacto com ROI garantido?</p>
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" style="padding:10px 18px;font-size:13px;" onclick="showPage('contato')">Saiba mais</button>
+      </div>
+    </div>
+
+    <!-- PANEL AI -->
+    <div id="spanel-ai" class="panel-wrap">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <span class="panel-num">Serviço 07 · IA aplicada</span>
+          <h3 class="panel-title">AI Automation</h3>
+          <p class="panel-desc">Automatizamos processos repetitivos usando IA — relatórios, conciliações, classificações, respostas e fluxos que hoje consomem horas do seu time.</p>
+        </div>
+        <div class="panel-kpis">
+          <div class="panel-kpi"><span class="panel-kpi-val">3–8 sem.</span><span class="panel-kpi-label">Implantação</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">R$ 12–40k</span><span class="panel-kpi-label">Investimento</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">−80%</span><span class="panel-kpi-label">Tempo manual</span></div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTab('ai','entregaveis',this)">Entregáveis</button>
+        <button class="ptab" onclick="switchTab('ai','quando',this)">Quando contratar</button>
+      </div>
+      <div class="panel-body">
+        <div id="ai-entregaveis" class="ptab-content active">
+          <div class="deliverables">
+            <div class="del-item">Automação de relatórios gerenciais periódicos</div>
+            <div class="del-item">Agentes de IA para triagem e classificação de dados</div>
+            <div class="del-item">Workflows automáticos entre sistemas</div>
+            <div class="del-item">Geração automática de insights e alertas</div>
+            <div class="del-item">Redução de 70–90% do trabalho manual repetitivo</div>
+            <div class="del-item">Documentação e treinamento do time</div>
+          </div>
+        </div>
+        <div id="ai-quando" class="ptab-content">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Time financeiro ou operacional sobrecarregado</strong> com tarefas manuais e repetitivas</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Relatórios que levam horas para montar</strong> e ficam desatualizados rapidamente</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Qualquer processo que segue regras claras</strong> pode ser automatizado com IA</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cta-bar">
+        <p>Quer liberar seu time para trabalho de maior valor?</p>
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" style="padding:10px 18px;font-size:13px;" onclick="showPage('contato')">Saiba mais</button>
+      </div>
+    </div>
+
+    <!-- PANEL RETAINER -->
+    <div id="spanel-ret" class="panel-wrap">
+      <div class="panel-header">
+        <div class="panel-header-left">
+          <span class="panel-num">Serviço 08 · MRR · Parceria contínua</span>
+          <h3 class="panel-title">Analytics Retainer</h3>
+          <p class="panel-desc">A Exactus como seu CFO de dados mensal. Análises sob demanda, suporte contínuo, acompanhamento de KPIs e projetos incrementais incluídos.</p>
+        </div>
+        <div class="panel-kpis">
+          <div class="panel-kpi"><span class="panel-kpi-val">R$ 5–15k</span><span class="panel-kpi-label">/mês</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">Mensal</span><span class="panel-kpi-label">Contrato</span></div>
+          <div class="panel-kpi"><span class="panel-kpi-val">Ilimitado</span><span class="panel-kpi-label">Demandas</span></div>
+        </div>
+      </div>
+      <div class="panel-tabs">
+        <button class="ptab active" onclick="switchTab('ret','entregaveis',this)">O que inclui</button>
+        <button class="ptab" onclick="switchTab('ret','quando',this)">Para quem é</button>
+      </div>
+      <div class="panel-body">
+        <div id="ret-entregaveis" class="ptab-content active">
+          <div class="deliverables">
+            <div class="del-item">Análises e relatórios sob demanda ilimitados</div>
+            <div class="del-item">Reunião mensal de revisão estratégica</div>
+            <div class="del-item">Suporte a decisões com modelagem rápida</div>
+            <div class="del-item">Monitoramento contínuo de KPIs críticos</div>
+            <div class="del-item">Projetos incrementais incluídos no pacote</div>
+            <div class="del-item">Acesso direto ao time via WhatsApp e e-mail</div>
+          </div>
+        </div>
+        <div id="ret-quando" class="ptab-content">
+          <div class="quando-wrap">
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Empresa que já passou pelo Diagnosis</strong> e quer manter a inteligência analítica ativa</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>CEO ou CFO que precisa de apoio analítico</strong> frequente mas não quer contratar um analista full-time</div></div>
+            <div class="quando-item"><div class="quando-dot"></div><div class="quando-text"><strong>Empresas em crescimento acelerado</strong> onde as decisões estratégicas são constantes</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-cta-bar">
+        <p>Quer ter a Exactus como seu parceiro estratégico de dados?</p>
+        <button class="btn-primary" onclick="showPage('contato')">Fale com nossos especialistas</button>
+        <button class="btn-secondary" style="padding:10px 18px;font-size:13px;" onclick="showPage('contato')">Saiba mais</button>
+      </div>
+    </div>
+
+    <div class="cta-banner" style="margin-top:20px;">
+      <h2 class="cta-banner-title">Não sabe qual serviço é o certo para você?</h2>
+      <p class="cta-banner-desc">Em 30 minutos entendemos o seu momento e indicamos o caminho com maior ROI.<br>Sem compromisso. Sem custo.</p>
+      <button class="btn-primary" onclick="showPage('contato')">Agendar conversa gratuita</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ BLOG ══════════════════ -->
+<div class="page" id="page-blog">
+  <div class="container">
+
+    <div class="blog-hero">
+      <span class="section-badge">Conteúdo e inteligência</span>
+      <h1 class="section-title" style="font-family:'DM Serif Display',serif;font-size:clamp(28px,5vw,48px);">Dados que <em style="font-style:italic;color:var(--gold2);">educam</em></h1>
+      <p class="section-desc">Análises, cases e tendências sobre dados, IA e decisões financeiras para empresas do mid-market brasileiro.</p>
+    </div>
+
+    <div class="blog-featured">
+      <div>
+        <span class="bf-tag">⭐ Artigo em destaque · Estratégia</span>
+        <h2 class="bf-title">Por que sua empresa cresce mas o caixa nunca sobra — e como os dados revelam a resposta</h2>
+        <p class="bf-excerpt">A armadilha mais comum do mid-market brasileiro: faturamento crescendo, margem encolhendo. Mostramos os 5 padrões de vazamento de caixa que encontramos em 90% dos diagnósticos que fazemos.</p>
+        <button class="btn-primary" style="font-size:13px;padding:10px 20px;">Ler artigo completo →</button>
+      </div>
+      <div class="bf-visual">📊</div>
+    </div>
+
+    <div class="blog-grid">
+      <div class="blog-card">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,rgba(109,191,138,0.3),rgba(13,31,60,0.8));">🤖</div>
+        <div class="blog-body">
+          <span class="blog-cat">IA Aplicada</span>
+          <h3 class="blog-title">Como a IA está mudando a gestão financeira do mid-market</h3>
+          <p class="blog-excerpt">CFOs que usam IA como copiloto trabalham em nível mais alto. Veja o que mudou e como se posicionar.</p>
+          <div class="blog-meta"><span>Mai 2025 · 6 min</span><span class="blog-read">Ler →</span></div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,rgba(201,151,58,0.3),rgba(13,31,60,0.8));">💰</div>
+        <div class="blog-body">
+          <span class="blog-cat">Rentabilidade</span>
+          <h3 class="blog-title">Custo invisível: os 7 lugares onde empresas perdem dinheiro sem perceber</h3>
+          <p class="blog-excerpt">Baseado em mais de 20 diagnósticos realizados em indústrias e distribuidoras do interior de SP.</p>
+          <div class="blog-meta"><span>Abr 2025 · 8 min</span><span class="blog-read">Ler →</span></div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,rgba(160,130,230,0.3),rgba(13,31,60,0.8));">🔮</div>
+        <div class="blog-body">
+          <span class="blog-cat">Preditivo</span>
+          <h3 class="blog-title">Forecast de caixa com machine learning: possível para qualquer empresa?</h3>
+          <p class="blog-excerpt">Desmistificamos o que é necessário para implementar previsão de caixa inteligente — sem time de data science.</p>
+          <div class="blog-meta"><span>Mar 2025 · 5 min</span><span class="blog-read">Ler →</span></div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,rgba(240,90,60,0.25),rgba(13,31,60,0.8));">🏭</div>
+        <div class="blog-body">
+          <span class="blog-cat">Indústria</span>
+          <h3 class="blog-title">Custo por produto real: por que o ERP mente e como descobrir a verdade</h3>
+          <p class="blog-excerpt">Indústrias com ERP rodando há anos ainda não sabem o custo real por SKU. Explicamos por quê e como resolver.</p>
+          <div class="blog-meta"><span>Fev 2025 · 7 min</span><span class="blog-read">Ler →</span></div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,rgba(59,142,240,0.3),rgba(13,31,60,0.8));">🏥</div>
+        <div class="blog-body">
+          <span class="blog-cat">Saúde</span>
+          <h3 class="blog-title">Glosas de convênio: como recuperar milhões com análise de dados</h3>
+          <p class="blog-excerpt">Clínicas e hospitais perdem entre 3–8% do faturamento em glosas não monitoradas. Veja como mudar isso.</p>
+          <div class="blog-meta"><span>Jan 2025 · 6 min</span><span class="blog-read">Ler →</span></div>
+        </div>
+      </div>
+      <div class="blog-card">
+        <div class="blog-thumb" style="background:linear-gradient(135deg,rgba(109,191,138,0.25),rgba(13,31,60,0.8));">🌱</div>
+        <div class="blog-body">
+          <span class="blog-cat">Agronegócio</span>
+          <h3 class="blog-title">Custo por hectare: o número que todo produtor rural precisa saber calcular</h3>
+          <p class="blog-excerpt">A maioria dos produtores toma decisão de plantio sem saber o custo real por cultura. Os dados já existem — falta organização.</p>
+          <div class="blog-meta"><span>Dez 2024 · 5 min</span><span class="blog-read">Ler →</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="newsletter">
+      <h3 class="nl-title">Receba análises toda semana</h3>
+      <p class="nl-desc">Conteúdo prático sobre dados, IA e decisões financeiras para gestores do mid-market. Sem spam.</p>
+      <div class="nl-form">
+        <input type="email" class="nl-input" placeholder="seu@email.com.br">
+        <button class="btn-primary" style="white-space:nowrap;">Quero receber →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════ CONTATO ══════════════════ -->
+<div class="page" id="page-contato">
+  <div class="container contato-page">
+
+    <div class="contato-grid">
+      <div class="contato-info">
+        <h2>Vamos conversar sobre<br><em>seu negócio?</em></h2>
+        <p>Preencha o formulário ao lado e um especialista da Exactus entrará em contato em até 1 dia útil para agendar uma conversa de 30 minutos — gratuita e sem compromisso.</p>
+        <div class="info-items">
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-text"><strong>Localização</strong>Campinas, SP · Atendemos todo o Brasil</div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">✉️</div>
+            <div class="info-text"><strong>E-mail</strong>contato@exactusconsulting.com.br</div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">💬</div>
+            <div class="info-text"><strong>WhatsApp</strong>Disponível após preenchimento do formulário</div>
+          </div>
+          <div class="info-item">
+            <div class="info-icon">⏱️</div>
+            <div class="info-text"><strong>Resposta em até</strong>1 dia útil após o envio</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contato-form">
+        <div id="formContent">
+          <h3 class="form-title">Fale com um especialista</h3>
+          <p class="form-subtitle">Preencha os dados abaixo e entraremos em contato.</p>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label class="form-label">Nome completo *</label>
+              <input type="text" class="form-input" placeholder="Seu nome completo" id="f-nome">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefone *</label>
+              <input type="tel" class="form-input" placeholder="(11) 99999-9999" id="f-tel">
+              <div class="wa-toggle">
+                <input type="checkbox" id="f-wa" checked>
+                <label for="f-wa">Este número é WhatsApp</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">E-mail corporativo *</label>
+              <input type="email" class="form-input" placeholder="voce@empresa.com.br" id="f-email">
+            </div>
+            <div class="form-group">
+              <label class="form-label">CNPJ da empresa</label>
+              <input type="text" class="form-input" placeholder="00.000.000/0000-00" id="f-cnpj">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Seu cargo *</label>
+              <input type="text" class="form-input" placeholder="Ex: CEO, CFO, Diretor" id="f-cargo">
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Setor de atuação *</label>
+              <select class="form-select" id="f-setor">
+                <option value="" disabled selected>Selecione o setor</option>
+                <option>Agronegócio</option>
+                <option>Saúde</option>
+                <option>Indústria</option>
+                <option>Tecnologia</option>
+                <option>Varejo e Distribuição</option>
+                <option>Educação</option>
+                <option>Serviços</option>
+                <option>Outros</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Tamanho da empresa (funcionários) *</label>
+              <select class="form-select" id="f-tam">
+                <option value="" disabled selected>Selecione o tamanho</option>
+                <option>1 a 10 funcionários</option>
+                <option>10 a 50 funcionários</option>
+                <option>50 a 100 funcionários</option>
+                <option>Maior que 100 funcionários</option>
+              </select>
+            </div>
+          </div>
+          <button class="form-submit" id="submitBtn" onclick="submitForm()">Quero falar com um especialista →</button>
+          <p style="font-size:11px;color:var(--gray);text-align:center;margin-top:12px;">🔒 Seus dados são confidenciais e não serão compartilhados.</p>
+        </div>
+        <div class="form-success" id="formSuccess">
+          <span class="success-icon">✅</span>
+          <h3>Mensagem recebida!</h3>
+          <p>Obrigado pelo contato, <strong id="successNome"></strong>.<br>Um especialista da Exactus entrará em contato em até 1 dia útil para agendar sua conversa de 30 minutos.</p>
+          <br>
+          <button class="btn-secondary" onclick="resetForm()" style="margin-top:12px;">Enviar outro contato</button>
+        </div>
+        <div class="form-error" id="formError" style="display:none;background:rgba(240,90,60,0.08);border:1px solid rgba(240,90,60,0.25);border-radius:10px;padding:14px 16px;margin-top:12px;font-size:13px;color:#F08070;line-height:1.5;">
+          ⚠️ Ocorreu um erro ao enviar. Tente novamente ou envie um e-mail diretamente para <strong>comercial@exactusconsulting.com.br</strong>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">EXACTUS<span>.</span></div>
+      <p>Transformamos dados em decisões que geram resultado real para empresas do mid-market brasileiro.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <button onclick="showPage('home')">Home</button>
+      <button onclick="showPage('sobre')">Quem Somos</button>
+      <button onclick="showPage('servicos')">Nossos Serviços</button>
+      <button onclick="showPage('blog')">Blog</button>
+      <button onclick="showPage('contato')">Contato</button>
+    </div>
+    <div class="footer-col">
+      <h4>Serviços</h4>
+      <button onclick="showPage('servicos');setTimeout(()=>openService('diag'),100)">Data Diagnosis</button>
+      <button onclick="showPage('servicos');setTimeout(()=>openService('smart'),100)">Smart Analytics</button>
+      <button onclick="showPage('servicos');setTimeout(()=>openService('bi'),100)">BI Pro + Decision Lab</button>
+      <button onclick="showPage('servicos');setTimeout(()=>openService('vp'),100)">Value Projects</button>
+      <button onclick="showPage('servicos');setTimeout(()=>openService('ai'),100)">AI Automation</button>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <a href="mailto:contato@exactusconsulting.com.br">contato@exactusconsulting.com.br</a>
+      <a href="#">Campinas, SP</a>
+      <button onclick="showPage('contato')">Agendar conversa gratuita</button>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Exactus Consulting. Todos os direitos reservados.</p>
+    <p>Campinas, SP · contato@exactusconsulting.com.br</p>
+  </div>
+</footer>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const map = {home:0,sobre:1,servicos:2,blog:3,contato:4};
+  const links = document.querySelectorAll('.nav-link');
+  if(map[id] !== undefined) links[map[id]].classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+function openDor(id) {
+  document.querySelectorAll('.dor-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.dor-service-panel').forEach(p => p.classList.remove('visible'));
+  document.getElementById('dor-' + id).classList.add('active');
+  document.getElementById('dsp-' + id).classList.add('visible');
+  setTimeout(() => {
+    document.getElementById('dsp-' + id).scrollIntoView({behavior:'smooth', block:'start'});
+  }, 60);
+}
+
+function openService(id) {
+  document.querySelectorAll('.svc-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel-wrap').forEach(p => p.classList.remove('visible'));
+  document.getElementById('sbtn-' + id).classList.add('active');
+  document.getElementById('spanel-' + id).classList.add('visible');
+  setTimeout(() => {
+    document.getElementById('spanel-' + id).scrollIntoView({behavior:'smooth', block:'start'});
+  }, 60);
+}
+
+function switchTab(svc, tab, el) {
+  const panels = document.querySelectorAll('#spanel-' + svc + ' .ptab-content');
+  const tabs = document.querySelectorAll('#spanel-' + svc + ' .ptab');
+  panels.forEach(c => c.classList.remove('active'));
+  tabs.forEach(t => t.classList.remove('active'));
+  document.getElementById(svc + '-' + tab).classList.add('active');
+  el.classList.add('active');
+}
+
+async function submitForm() {
+  const nome  = document.getElementById('f-nome').value.trim();
+  const tel   = document.getElementById('f-tel').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const cnpj  = document.getElementById('f-cnpj').value.trim();
+  const cargo = document.getElementById('f-cargo').value.trim();
+  const setor = document.getElementById('f-setor').value;
+  const tam   = document.getElementById('f-tam').value;
+  const wa    = document.getElementById('f-wa').checked ? 'Sim' : 'Não';
+
+  // Validação
+  if (!nome || !tel || !email || !cargo || !setor || !tam) {
+    alert('Por favor, preencha todos os campos obrigatórios (*)');
+    return;
+  }
+
+  // Loading state
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+  document.getElementById('formError').style.display = 'none';
+
+  // Payload
+  const payload = {
+    _subject: '🚀 Novo lead — Exactus Consulting',
+    _replyto: email,
+    nome, telefone: tel, whatsapp: wa,
+    email, cnpj: cnpj || '—',
+    cargo, setor, tamanho_empresa: tam
+  };
+
+  try {
+    // ─────────────────────────────────────────────────────────────
+    // FORMSPREE: substitua "SEU_ID_AQUI" pelo ID gerado no passo
+    // de configuração abaixo (ex: "xkgwbpqz")
+    // ─────────────────────────────────────────────────────────────
+    const FORMSPREE_ID = 'SEU_ID_AQUI';
+    const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      document.getElementById('successNome').textContent = nome.split(' ')[0];
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      throw new Error('Formspree error');
+    }
+  } catch (err) {
+    document.getElementById('formError').style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Quero falar com um especialista →';
+  }
+}
+
+function resetForm() {
+  document.getElementById('formContent').style.display = 'block';
+  document.getElementById('formSuccess').style.display = 'none';
+  document.getElementById('formError').style.display = 'none';
+  ['f-nome','f-tel','f-email','f-cnpj','f-cargo'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-setor').selectedIndex = 0;
+  document.getElementById('f-tam').selectedIndex = 0;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = false;
+  btn.textContent = 'Quero falar com um especialista →';
+}
+
+// Close mobile menu on outside click
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobileMenu');
+  const hamburger = document.querySelector('.hamburger');
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+</script>
+</body>
+</html>
